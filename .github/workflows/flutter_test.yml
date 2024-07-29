@@ -16,10 +16,13 @@ jobs:
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: 'stable' # Use a versão estável mais recente do Flutter
+        flutter-version: '2.2.3' # Especifique a versão exata do Flutter
 
     - name: Install lcov
-      run: sudo apt-get install lcov
+      run: sudo apt-get install -y lcov
+
+    - name: Check lcov version
+      run: lcov --version
 
     - name: Install dependencies
       run: flutter pub get
@@ -27,9 +30,15 @@ jobs:
     - name: Run tests with coverage
       run: flutter test --coverage
 
+    - name: List coverage directory
+      run: ls coverage/
+
     - name: Generate test coverage report
       run: |
         genhtml coverage/lcov.info -o coverage/
+
+    - name: List generated coverage report
+      run: ls coverage/
 
     - name: Deploy to GitHub Pages
       if: success()
