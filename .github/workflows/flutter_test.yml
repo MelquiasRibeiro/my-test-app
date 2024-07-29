@@ -1,0 +1,40 @@
+name: Flutter Test and Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: 'stable' # Use a versão estável mais recente do Flutter
+
+    - name: Install lcov
+      run: sudo apt-get install lcov
+
+    - name: Install dependencies
+      run: flutter pub get
+
+    - name: Run tests with coverage
+      run: flutter test --coverage
+
+    - name: Generate test coverage report
+      run: |
+        genhtml coverage/lcov.info -o coverage/
+
+    - name: Deploy to GitHub Pages
+      if: success()
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./coverage
+        publish_branch: gh-pages
