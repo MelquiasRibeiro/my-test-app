@@ -16,7 +16,10 @@ jobs:
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.3.10' # Especifique uma versão do Flutter que suporte Dart SDK >=3.2.0
+        flutter-version: '3.7.0' # Especifique a versão mais recente do Flutter que suporte Dart SDK >=3.2.0
+
+    - name: Run flutter doctor
+      run: flutter doctor
 
     - name: Install lcov
       run: sudo apt-get install -y lcov
