@@ -16,16 +16,10 @@ jobs:
     - name: Set up Flutter
       uses: subosito/flutter-action@v2
       with:
-        flutter-version: '3.22.2' # Use a versão mais recente do Flutter que inclui Dart SDK >=3.2.0
+        flutter-version: '3.22.2'
 
     - name: Install lcov
-      run: sudo apt-get install -y lcov
-
-    - name: Check lcov version
-      run: lcov --version
-
-    - name: Clean Flutter build and pub cache
-      run: flutter clean && flutter pub get
+      run: sudo apt-get install lcov
 
     - name: Install dependencies
       run: flutter pub get
@@ -33,20 +27,14 @@ jobs:
     - name: Run tests with coverage
       run: flutter test --coverage
 
-    - name: List coverage directory
-      run: ls coverage/
-
     - name: Generate test coverage report
       run: |
         genhtml coverage/lcov.info -o coverage/
-
-    - name: List generated coverage report
-      run: ls coverage/
 
     - name: Deploy to GitHub Pages
       if: success()
       uses: peaceiris/actions-gh-pages@v3
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        github_token: ${{ secrets.GH_PAGES_TOKEN }}
         publish_dir: ./coverage
         publish_branch: gh-pages
